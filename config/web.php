@@ -22,6 +22,17 @@ $config = [
             ]
 
         ],
+        'httpClient' => [
+            'class' => 'yii\httpclient\Client',
+            // Необязательно: настройка по умолчанию
+            'transport' => 'yii\httpclient\CurlTransport',
+            'requestConfig' => [
+                'format' => yii\httpclient\Client::FORMAT_JSON,
+            ],
+            'responseConfig' => [
+                'format' => yii\httpclient\Client::FORMAT_JSON,
+            ],
+        ],
         'response' => [
             'format' => yii\web\Response::FORMAT_JSON,
             'charset' => 'UTF-8',
@@ -31,6 +42,16 @@ $config = [
                 if ($response->statusCode == 404) {
                     $response->data = [
                         'message' => 'not found',
+                    ];
+                }
+                if ($response->statusCode == 401) {
+                    $response->data = [
+                        'message' => 'login failed',
+                    ];
+                }
+                if ($response->statusCode == 403) {
+                    $response->data = [
+                        'message' => 'forbidden for you',
                     ];
                 }
             },
@@ -77,8 +98,22 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
+                "POST api/register" => 'user/register',
+                "OPTIONS api/register" => 'user/options',
+                "POST api/login" => 'user/login',
+                "OPTIONS api/login" => 'user/options',
+                "POST api/logout" => 'user/logout',
+                "OPTIONS api/logout" => 'user/options',
+                "POST api/tasks/new" => 'task/new',
+                "OPTIONS api/tasks/new" => 'task/options',
 
-
+                "POST api/tasks" => 'task/get-tasks',
+                "OPTIONS api/tasks" => 'task/options',
+                
+                "DELETE api/<id>" => 'task/delete',
+                "OPTIONS api/<id>" => 'task/options',
+                "PATCH api/<id>" => 'task/edit',
+                "OPTIONS api/<id>" => 'task/options',
             ],
         ],
     ],
