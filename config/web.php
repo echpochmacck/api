@@ -107,7 +107,7 @@ $config = [
                 "POST api/tasks/new" => 'task/new',
                 "OPTIONS api/tasks/new" => 'task/options',
 
-                "POST api/tasks" => 'task/get-tasks',
+                "GET api/tasks" => 'task/get-tasks',
                 "OPTIONS api/tasks" => 'task/options',
                 
                 "DELETE api/<id>" => 'task/delete',
