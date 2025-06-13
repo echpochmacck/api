@@ -16,7 +16,7 @@ class UserController extends \yii\rest\ActiveController
     {
         return $this->render('index');
     }
-
+    
     public function behaviors()
     {
         $behaviors = parent::behaviors();
@@ -29,8 +29,7 @@ class UserController extends \yii\rest\ActiveController
         $behaviors['corsFilter'] = [
             'class' => \yii\filters\Cors::class,
             'cors' => [
-                // 'Origin' => [isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : 'http://' . $_SERVER['REMOTE_ADDR']],
-                'Origin' => ["*"],
+                'Origin' => [isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : 'http://' . $_SERVER['REMOTE_ADDR']],
                 'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
                 'Access-Control-Request-Headers' => ['*'],
             ],
@@ -56,7 +55,7 @@ class UserController extends \yii\rest\ActiveController
     {
         $model = new User();
         $model->scenario = 'register';
-        $model->load(Yii::$app->request->post(), '');
+        $model->load(Yii::$app->request->post(),'');
         if ($model->validate()) {
             $model->password = Yii::$app->security->generatePasswordHash($model->password);
             $model->role_id = Role::getRoleId('user');
@@ -77,22 +76,25 @@ class UserController extends \yii\rest\ActiveController
 
     public function actionLogin()
     {
-        $model = new User();
-        $model->load(Yii::$app->request->post(), '');
+         $model = new User();
+        $model->load(Yii::$app->request->post(),'');
         if ($model->validate()) {
             $user = User::findOne(['login' => $model->login]);
             if ($user && $user->validatePassword($model->password)) {
-                $user->token = Yii::$app->security->generateRandomString();
-                $user->save(false);
-                return $this->asJson([
-                    'token' => $user->token
-                ]);
-            } else {
-                Yii::$app->response->statusCode = 401;
-                return '';
-            }
+
+            $user->token = Yii::$app->security->generateRandomString();
+            $user->save(false);
+            Yii::$app->response->statusCode = 200;
+            return $this->asJson([
+                'token' => $user->token
+            ]);
+        } else {
+            Yii::$app->response->statusCode = 401;
+            return '';
+        }
         } else {
             Yii::$app->response->statusCode = 422;
+
             return $this->asJson([
                 'errors' => $model->errors
             ]);
@@ -106,4 +108,5 @@ class UserController extends \yii\rest\ActiveController
         Yii::$app->response->statusCode = 204;
         return '';
     }
+
 }

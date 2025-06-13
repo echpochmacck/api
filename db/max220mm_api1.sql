@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 4.9.7
 -- https://www.phpmyadmin.net/
 --
--- Хост: 127.0.0.1:3306
--- Время создания: Июн 04 2025 г., 17:26
--- Версия сервера: 8.0.30
--- Версия PHP: 8.1.9
+-- Хост: localhost
+-- Время создания: Июн 13 2025 г., 23:34
+-- Версия сервера: 8.0.34-26-beget-1-1
+-- Версия PHP: 5.6.40
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- База данных: `evg`
+-- База данных: `max220mm_api1`
 --
 
 -- --------------------------------------------------------
@@ -26,10 +27,13 @@ SET time_zone = "+00:00";
 --
 -- Структура таблицы `role`
 --
+-- Создание: Июн 06 2025 г., 17:04
+--
 
+DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
   `id` int UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -45,11 +49,14 @@ INSERT INTO `role` (`id`, `title`) VALUES
 --
 -- Структура таблицы `task`
 --
+-- Создание: Июн 06 2025 г., 17:04
+--
 
+DROP TABLE IF EXISTS `task`;
 CREATE TABLE `task` (
   `id` int UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `parent_id` int UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -61,18 +68,22 @@ INSERT INTO `task` (`id`, `title`, `description`, `parent_id`) VALUES
 (1, 'task1', '1223', NULL),
 (2, 'task2', '1223', NULL),
 (3, 'task1.1', '1223', 1),
-(4, 'task1.1.1', '1223', 3);
+(4, 'task1.1.1', '1223', 1);
 
 -- --------------------------------------------------------
 
 --
 -- Структура таблицы `user`
 --
+-- Создание: Июн 13 2025 г., 09:14
+-- Последнее обновление: Июн 13 2025 г., 19:06
+--
 
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int UNSIGNED NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `login` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `role_id` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -81,8 +92,11 @@ CREATE TABLE `user` (
 -- Дамп данных таблицы `user`
 --
 
-INSERT INTO `user` (`id`, `email`, `password`, `token`, `role_id`) VALUES
-(1, 'u@u.com', '$2y$13$QlGDEyOiYMi7Ivx1vo7pZ.C1ihH/zImQvkMd05j7/vkbCsCswft5S', 'UPUm9bQpVoPWhfzRTQl45ncR4lpCtbCN', 1);
+INSERT INTO `user` (`id`, `login`, `password`, `token`, `role_id`) VALUES
+(1, 'u@u.com', '$2y$13$QlGDEyOiYMi7Ivx1vo7pZ.C1ihH/zImQvkMd05j7/vkbCsCswft5S', 'UPUm9bQpVoPWhfzRTQl45ncR4lpCtbCN', 1),
+(2, 'user', '$2y$13$1L7WbhaEHWZl5bC8.Ox76uczDol92GyHVovcfa/POyVWw1F0Ta/uS', 'Xvkw1LCN9DdOaJ1vNrKmRTZ_3AASa5Bd', 1),
+(3, 'name', '$2y$13$MjZldRwwLPDX8BrEfNt2NOit8XOqe3dKgoEofRHsipJbmapikV2CW', 'lyU6v2aDqlsA3k9GgcC7YanB6T9uhmE3', 1),
+(4, 'nam2e', '$2y$13$kpEj1DU4sIajlnpvlhc44uuS.b.l884.pLKZaZMXEZeOOAUbC1NM2', 'QmKrBDi1yCcuN0Mjh7fqSu3WdwAT-V5d', 1);
 
 --
 -- Индексы сохранённых таблиц
@@ -128,7 +142,7 @@ ALTER TABLE `task`
 -- AUTO_INCREMENT для таблицы `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц

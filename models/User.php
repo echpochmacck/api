@@ -9,7 +9,7 @@ use yii\web\IdentityInterface;
  * This is the model class for table "user".
  *
  * @property int $id
- * @property string $email
+ * @property string $login
  * @property string $password
  * @property string $token
  * @property int $role_id
@@ -19,7 +19,7 @@ use yii\web\IdentityInterface;
 class User extends \yii\db\ActiveRecord  implements IdentityInterface
 {
 
-    CONST SCENARIO_REGISTER = 'register';
+    const SCENARIO_REGISTER = 'register';
 
     /**
      * {@inheritdoc}
@@ -35,11 +35,11 @@ class User extends \yii\db\ActiveRecord  implements IdentityInterface
     public function rules()
     {
         return [
-            [['email', 'password'], 'required'],
-            ['email', 'email','on' => self::SCENARIO_REGISTER],
-            ['email', 'unique','on' => self::SCENARIO_REGISTER],
+            [['login', 'password'], 'required'],
+
+            ['login', 'unique', 'on' => self::SCENARIO_REGISTER],
             [['role_id'], 'integer'],
-            [['email', 'password', 'token'], 'string', 'max' => 255],
+            [['login', 'password', 'token'], 'string', 'max' => 255],
             [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::class, 'targetAttribute' => ['role_id' => 'id']],
         ];
     }
@@ -51,7 +51,7 @@ class User extends \yii\db\ActiveRecord  implements IdentityInterface
     {
         return [
             'id' => 'ID',
-            'email' => 'Email',
+            'login' => 'Login',
             'password' => 'Password',
             'token' => 'Token',
             'role_id' => 'Role ID',
@@ -67,7 +67,7 @@ class User extends \yii\db\ActiveRecord  implements IdentityInterface
     {
         return $this->hasOne(Role::class, ['id' => 'role_id']);
     }
-public static function findIdentity($id)
+    public static function findIdentity($id)
     {
         return static::findOne($id);
     }
@@ -95,6 +95,4 @@ public static function findIdentity($id)
     {
         return Yii::$app->security->validatePassword($password, $this->password);
     }
-    
-
 }
